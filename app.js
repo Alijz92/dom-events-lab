@@ -1,32 +1,62 @@
-const buttons = document.querySelectorAll('.button')
+const calculator = document.querySelector('#calculator')
 const display = document.querySelector('.display')
-
-buttons.forEach((button) => {
-  button.addEventListener('click', (event) => {
-    let buttonValue = event.target.textContent
-    switch (buttonValue) {
-      case 'C':
-        clear()
-        break
-      case '=':
-        evaluate()
-        break
-      default:
-        toDisplayOnScreen(buttonValue)
-    }
-  })
-})
-const clear = () => {
-  display.textContent = ''
-}
-const toDisplayOnScreen = (value) => {
-  display.textContent = display.textContent + value
-}
-const evaluate = () => {
-  try {
-    let calculation = eval(display.textContent)
-    display.textContent = calculation
-  } catch (error) {
-    display.textContent = 'Invalid error'
+let firstOperand = ''
+let secondOperand = ''
+let operator = null
+calculator.addEventListener('click', (event) => {
+  if (event.target.classList.contains('number')) {
+    const displayOnScreen = display.textContent + event.target.textContent
+    display.textContent = displayOnScreen
   }
-}
+  if (operator) {
+    secondOperand = secondOperand + event.target.textContent
+  } else {
+    firstOperand = firstOperand + event.target.textContent
+  }
+
+  if (event.target.innerText === '*') {
+    operator = '*'
+    display.textContent = display.textContent + operator
+  }
+  if (event.target.innerText === '/') {
+    operator = '/'
+    display.textContent = display.textContent + operator
+  }
+  if (event.target.innerText === '+') {
+    operator = '+'
+    display.textContent = display.textContent + operator
+  }
+  if (event.target.innerText === '-') {
+    operator = '-'
+    display.textContent = display.textContent + operator
+  }
+
+  if (event.target.innerText === '=') {
+    if (operator === '*') {
+      const result = parseInt(firstOperand) * parseInt(secondOperand)
+      display.textContent = result
+    }
+    if (operator === '/') {
+      const result = parseInt(firstOperand) / parseInt(secondOperand)
+      display.textContent = result
+    }
+    if (operator === '+') {
+      const result = parseInt(firstOperand) + parseInt(secondOperand)
+      display.textContent = result
+    }
+    if (operator === '-') {
+      const result = parseInt(firstOperand) - parseInt(secondOperand)
+      display.textContent = result
+    }
+    firstOperand = ''
+    secondOperand = ''
+    operator = null
+  }
+
+  if (event.target.innerText === 'C') {
+    display.textContent = '0'
+    firstOperand = ''
+    secondOperand = ''
+    operator = null
+  }
+})
